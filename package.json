@@ -4,7 +4,8 @@
   "version": "0.1.0",
   "scripts": {
     "start": "node server.js",
-    "test": "NODE_ENV=test && mocha './test/**/*.spec.js'"
+    "test": "mocha -r esm './test/main.js'",
+    "testbrk": "mocha -r esm --inspect-brk './test/main.js'"
   },
   "keywords": [],
   "author": {
@@ -23,15 +24,18 @@
     "express": "^4.11.1",
     "express-jwt": "^5.3.0",
     "knex": "^0.14.2",
+    "nodegit": "^0.23.0",
     "objection": "^0.9.2",
     "pg": "^4.5.7",
     "underscore": "^1.8.3"
   },
   "devDependencies": {
     "chai": "^4.1.2",
-    "chai-http": "^3.0.0",
+    "chai-http": "^4.2.0",
+    "esm": "^3.0.84",
     "expect": "^1.20.2",
     "jsdom": "^9.8.0",
+    "mocha": "^5.2.0",
     "sqlite3": "^4.0.4"
   },
   "private": "true"
