@@ -33,19 +33,22 @@ module.exports = (app, g) => {
     .catch(next)
   })
 
-  // app.get(`/list/:id`, (req, res, next) => {
-  //   const q = (req.q || g.models[TABLENAMES.REPORTY].query())
-  //   req.q = q.where('typ', '=', 'oport').where(AN.NAHRAZUJICI, 'like', `%${req.params.id}%`)
-  //   next()
-  // }, mWarez.list, mWarez.send)
+  app.get(`/list/:parent?`, (req, res, next) => {
+    g.knex(TABLE_NAMES.DOCUMENTS).where('parent', req.params.parent || null)
+    .then(found => {
+      res.json(found)
+      next()
+    })
+    .catch(next)
+  })
 
   app.get(`/:id`, (req, res, next) => {
     const q = g.knex(TABLE_NAMES.DOCUMENTS).where('id', req.params.id)
     const getContent = repo.getContent(req.params.id)
     Promise.all([q, getContent]).then(ress => {
-      const data = ress[0]
-      data.content = ress[1]
-      req.json(data)
+      const data = ress[0][0]
+      data.content = ress[1].toString()
+      res.json(data)
       next()
     }).catch(next)
   })

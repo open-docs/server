@@ -8,7 +8,7 @@ module.exports = function (g) {
   const r = chai.request(g.baseurl)
 
   const p = {
-    title: 'pok1',
+    name: 'pok1',
     perms: 'aa'
   }
 
@@ -26,7 +26,7 @@ module.exports = function (g) {
 
     it('shall update the document pok1', () => {
       const change = {
-        title: 'pok1changed'
+        name: 'pok1changed'
       }
       return r.put(`/${TABLE_NAMES.DOCUMENTS}/${p.id}`).send(change)
       .then(res => {
@@ -41,6 +41,14 @@ module.exports = function (g) {
       }
       return r.put(`/${TABLE_NAMES.DOCUMENTS}/${p.id}/content`).send(change)
       .then(res => {
+        res.should.have.status(200)
+      })
+    })
+
+    it('shall get the pok1', () => {
+      return r.get(`/${TABLE_NAMES.DOCUMENTS}/${p.id}`)
+      .then(res => {
+        res.body.content.should.eql('test1 abcdefgh')
         res.should.have.status(200)
       })
     })
