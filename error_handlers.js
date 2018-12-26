@@ -8,8 +8,8 @@ export function generalErrorHlr (err, req, res, next) {
   }
 }
 export function authErrorHlr (err, req, res, next) {
-  if (err.name === 'UnauthorizedError') {
-    return res.status(err.status).send(err.message)
+  if (err.name === 'JsonWebTokenError') {
+    return res.status(401).send(err.message)
   }
   next(err)
 }

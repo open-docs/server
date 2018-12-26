@@ -2,6 +2,7 @@
 const chai = require('chai')
 // const should = chai.should()
 import {TABLE_NAMES} from '../consts'
+import _ from 'underscore'
 
 module.exports = function (g) {
   //
@@ -14,8 +15,22 @@ module.exports = function (g) {
 
   return describe(TABLE_NAMES.DOCUMENTS, function () {
     //
+    it('must not create a new document wihout auth', () => {
+      return r.post(`/${TABLE_NAMES.DOCUMENTS}`).send(p)
+      .then(res => {
+        res.should.have.status(401)
+      })
+    })
+
+    it('shall create a new document without mandatory item', () => {
+      return r.post(`/${TABLE_NAMES.DOCUMENTS}`).send(_.omit(p, 'name'))
+      .set('Authorization', g.gimpliToken)
+      .then(res => {
+        res.should.have.status(400)
+      })
+    })
+
     it('shall create a new document pok1', () => {
-      g.user = {id: 111}
       return r.post(`/${TABLE_NAMES.DOCUMENTS}`).send(p)
       .set('Authorization', g.gimpliToken)
       .then(function (res) {
