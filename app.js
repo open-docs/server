@@ -2,7 +2,7 @@ const bodyParser = require('body-parser')
 const express = require('express')
 const Documents = require('./api/documents')
 import {generalErrorHlr, authErrorHlr, notFoundErrorHlr} from './error_handlers'
-import {JWTMiddleware} from './auth'
+import {authMW, optionalAuthMW} from './auth'
 import {TABLE_NAMES} from './consts'
 
 function _createError (message, status) {
@@ -11,9 +11,12 @@ function _createError (message, status) {
 
 module.exports = (app, g) => {
   //
-  g.authMW = g.authMW || JWTMiddleware
-  g.createError = _createError
-  g.bodyParser = bodyParser.json()
+  Object.assign(g, {
+    authMW,
+    optionalAuthMW,
+    createError: _createError,
+    bodyParser: bodyParser.json()
+  })
 
   const documentApp = express()
   Documents(documentApp, g)

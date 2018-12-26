@@ -33,7 +33,7 @@ module.exports = (app, g) => {
     .catch(next)
   })
 
-  app.get(`/list/:parent?`, (req, res, next) => {
+  app.get(`/list/:parent?`, g.optionalAuthMW, (req, res, next) => {
     g.knex(TABLE_NAMES.DOCUMENTS).where('parent', req.params.parent || null)
     .then(found => {
       res.json(found)
@@ -42,7 +42,7 @@ module.exports = (app, g) => {
     .catch(next)
   })
 
-  app.get(`/:id`, (req, res, next) => {
+  app.get(`/:id`, g.optionalAuthMW, (req, res, next) => {
     const q = g.knex(TABLE_NAMES.DOCUMENTS).where('id', req.params.id)
     const getContent = repo.getContent(req.params.id)
     Promise.all([q, getContent]).then(ress => {

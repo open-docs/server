@@ -17,6 +17,7 @@ module.exports = function (g) {
     it('shall create a new document pok1', () => {
       g.user = {id: 111}
       return r.post(`/${TABLE_NAMES.DOCUMENTS}`).send(p)
+      .set('Authorization', g.gimpliToken)
       .then(function (res) {
         res.should.have.status(201)
         res.should.have.header('content-type', /^application\/json/)
@@ -29,6 +30,7 @@ module.exports = function (g) {
         name: 'pok1changed'
       }
       return r.put(`/${TABLE_NAMES.DOCUMENTS}/${p.id}`).send(change)
+      .set('Authorization', g.gimpliToken)
       .then(res => {
         res.should.have.status(200)
       })
@@ -40,6 +42,7 @@ module.exports = function (g) {
         message: 'change1'
       }
       return r.put(`/${TABLE_NAMES.DOCUMENTS}/${p.id}/content`).send(change)
+      .set('Authorization', g.gimpliToken)
       .then(res => {
         res.should.have.status(200)
       })
