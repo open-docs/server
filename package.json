@@ -3,7 +3,7 @@
   "description": "open document sever part",
   "version": "0.1.0",
   "scripts": {
-    "start": "node server.js",
+    "start": "node -r esm server.js",
     "test": "mocha -r esm './test/main.js'",
     "testbrk": "mocha -r esm --inspect-brk './test/main.js'"
   },
