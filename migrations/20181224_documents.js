@@ -7,9 +7,11 @@ exports.up = (knex, Promise) => {
     table.string('template', 64).defaultTo(null)
     table.string('name', 64).notNullable()
     table.integer('owner').notNullable()
+    table.integer('size').notNullable().defaultTo(0)
     table.string('perms', 64).notNullable()
-    table.enu('typ', ['folder', 'text']).defaultTo('text')
+    table.enu('typ', ['folder', 'text']).defaultTo('folder')
     table.timestamp('created').notNullable().defaultTo(knex.fn.now())
+    table.timestamp('changed')
     table.unique(['name', 'parent']) // ensure unique files within particular folder
   })
 }

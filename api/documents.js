@@ -16,7 +16,8 @@ module.exports = (app, g) => {
   })
 
   app.put(`/:id`, g.authMW, g.bodyParser, (req, res, next) => {
-    g.knex(TABLE_NAMES.DOCUMENTS).where('id', req.params.id).update(req.body)
+    const change = Object.assign(req.body, {changed: new Date()})
+    g.knex(TABLE_NAMES.DOCUMENTS).where('id', req.params.id).update(change)
     .then(saved => {
       res.json(saved)
       next()
@@ -25,9 +26,16 @@ module.exports = (app, g) => {
   })
 
   app.put(`/:id/content`, g.authMW, g.bodyParser, (req, res, next) => {
+    const change = {
+      changed: new Date(),
+      size: req.body.content.length
+    }
     repo.writeContent(req.params.id, req.body.content, req.body.message)
     .then(saved => {
-      res.json(req.body.content.length)
+      return g.knex(TABLE_NAMES.DOCUMENTS).where('id', req.params.id).update(change)
+    })
+    .then(saved => {
+      res.json(saved)
       next()
     })
     .catch(next)
