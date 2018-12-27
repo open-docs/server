@@ -64,7 +64,7 @@ module.exports = function (g) {
     })
 
     it('shall get the pok1', () => {
-      return r.get(`/${TABLE_NAMES.DOCUMENTS}/${p.id}`)
+      return r.get(`/${TABLE_NAMES.DOCUMENTS}/${p.id}/detail`)
       .then(res => {
         res.body.content.should.eql('test1 abcdefgh')
         res.should.have.status(200)

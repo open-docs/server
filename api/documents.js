@@ -50,7 +50,7 @@ module.exports = (app, g) => {
     .catch(next)
   })
 
-  app.get(`/:id`, g.optionalAuthMW, (req, res, next) => {
+  app.get(`/:id/detail`, g.optionalAuthMW, (req, res, next) => {
     const q = g.knex(TABLE_NAMES.DOCUMENTS).where('id', req.params.id)
     const getContent = repo.getContent(req.params.id)
     Promise.all([q, getContent]).then(ress => {
