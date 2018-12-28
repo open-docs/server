@@ -42,8 +42,15 @@ module.exports = (app, g) => {
   })
 
   app.get(`/list/:parent?`, g.optionalAuthMW, (req, res, next) => {
-    g.knex(TABLE_NAMES.DOCUMENTS).where('parent', req.params.parent || null)
-    .then(found => {
+    let q = g.knex(TABLE_NAMES.DOCUMENTS).where('parent', req.params.parent || null)
+    if (req.query._select) {
+      q = q.select(req.query._select.split(','))
+      delete req.query._select
+    }
+    for (let k in req.query || {}) {
+      q = q.where(k, '=', req.query[k])
+    }
+    q.then(found => {
       res.json(found)
       next()
     })
