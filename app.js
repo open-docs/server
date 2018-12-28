@@ -1,6 +1,7 @@
 const bodyParser = require('body-parser')
 const express = require('express')
 const Documents = require('./api/documents')
+import cors from 'cors'
 import {generalErrorHlr, authErrorHlr, notFoundErrorHlr} from './error_handlers'
 import {authMW, optionalAuthMW} from './auth'
 import {TABLE_NAMES} from './consts'
@@ -17,6 +18,8 @@ module.exports = (app, g) => {
     createError: _createError,
     bodyParser: bodyParser.json()
   })
+
+  process.env.USE_CORS === 'true' && app.use(cors())
 
   const documentApp = express()
   Documents(documentApp, g)
